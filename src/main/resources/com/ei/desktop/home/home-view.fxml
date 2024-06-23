@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ei.desktop.HomeController">
+    <left>
+        <VBox fx:id="menuBox">
+            <Button text="pin" onAction="#pin"/>
+            <Button text="explain" onAction="#sentence"/>
+        </VBox>
+    </left>
+    <center>
+        <Pane fx:id="centerPane" />
+    </center>
+</BorderPane>
