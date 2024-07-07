@@ -1,0 +1,155 @@
+.root {
+    -fx-background-color: #f0f0f0;
+    -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 150px;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #34495e;
+}
+
+.main-content {
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+.input-area, .output-area {
+    -fx-pref-height: 150px;
+    -fx-font-size: 14px;
+}
+
+.action-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 100px;
+}
+
+.action-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.details-area {
+    -fx-pref-height: 200px;
+    -fx-font-size: 12px;
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.history-pane {
+    -fx-background-color: #ecf0f1;
+}
+
+.history-pane > .title {
+    -fx-background-color: #bdc3c7;
+    -fx-font-weight: bold;
+}
+
+.history-list {
+    -fx-background-color: white;
+}
+
+.history-list .list-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.history-list .list-cell:even {
+    -fx-background-color: #ffffff;
+}
+
+.history-list .list-cell:filled:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+/* ... 保留之前的样式 ... */
+
+.word-details-scroll {
+    -fx-background-color: transparent;
+}
+
+.word-details-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.word-details-flow {
+    -fx-background-color: transparent;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-padding: 10;
+}
+
+.word-card {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.word-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.word-card .word {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.word-card .definition {
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+/* ... 保留之前的样式 ... */
+
+.word-card {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.word-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.word-card .word {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.word-card .definition {
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+.word-card .remove-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #999;
+    -fx-font-size: 10px;
+    -fx-padding: 2 5 2 5;
+    -fx-cursor: hand;
+}
+
+.word-card .remove-button:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #333;
+}

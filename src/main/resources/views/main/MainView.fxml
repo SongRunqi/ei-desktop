@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.ei.desktop.controller.main.MainViewController"
+            stylesheets="@main-style.css">
+
+    <center>
+        <VBox styleClass="main-content">
+            <TextArea fx:id="inputTextArea" promptText="Enter English sentence here"
+                      styleClass="input-area"
+                      onMouseClicked="#handleTextSelection"/>
+            <Button text="Translate" onAction="#handleTranslate" styleClass="action-button"/>
+            <TextArea fx:id="translationTextArea" promptText="Translation will appear here" styleClass="output-area"/>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox styleClass="sidebar">
+            <Label text="Word Details" styleClass="sidebar-title"/>
+            <ScrollPane fitToWidth="true" styleClass="word-details-scroll">
+                <FlowPane fx:id="wordDetailsFlowPane" styleClass="word-details-flow"/>
+            </ScrollPane>
+        </VBox>
+    </right>
+
+
+
+    <bottom>
+        <TitledPane text="Translation History" expanded="false" styleClass="history-pane">
+            <ListView fx:id="historyListView" styleClass="history-list"/>
+        </TitledPane>
+    </bottom>
+
+</BorderPane>

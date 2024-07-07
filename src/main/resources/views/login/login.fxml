@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.text.Text?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.ei.desktop.controller.login.LoginController"
+      styleClass="login-panel"
+      stylesheets="@login-style.css"
+      alignment="CENTER" spacing="20">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="%login.title" styleClass="login-title"/>
+
+    <TextField fx:id="usernameField" promptText="%login.username" styleClass="login-field"/>
+
+    <PasswordField fx:id="passwordField" promptText="%login.password" styleClass="login-field"/>
+    <CheckBox fx:id="rememberMeCheckBox" text="%login.rememberMe"/>
+
+    <Button text="%login.button" onAction="#handleLogin" styleClass="login-button"/>
+
+    <Text fx:id="actiontarget" styleClass="message-label"/>
+</VBox>
