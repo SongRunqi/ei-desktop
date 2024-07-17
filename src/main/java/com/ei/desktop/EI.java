@@ -30,7 +30,7 @@ public class EI extends Application {
             SceneManager.getInstance().setResourceBundle(bundle);
 
             // 加载登录页面
-            SceneManager.getInstance().loadScene(AppRoute.LOGIN);
+            SceneManager.getInstance().loadScene(AppRoute.MAIN);
 
             // 显示窗口
             primaryStage.show();

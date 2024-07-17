@@ -46,6 +46,14 @@ public class SceneManager {
         primaryStage.setTitle(route.getTitle());
     }
 
+    /**
+     *
+     * @param route
+     * @param controllerClass
+     * @return
+     * @param <T>
+     * @throws IOException
+     */
     public <T> T loadScene(AppRoute route, Class<T> controllerClass) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(route.getFxmlPath()));
         Parent root = loader.load();

@@ -69,13 +69,21 @@ public class LoginController {
                 } else {
                     prefs.remove("username");
                 }
+                try {
+                    // 加载主页面
+                    MainViewController mainController = SceneManager.getInstance().loadScene(AppRoute.MAIN, MainViewController.class);
+                    mainController.setLoggedIn(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showError("Error loading main view");
+                }
                 actiontarget.setText("登录成功");
                 actiontarget.setStyle("-fx-fill: green;");
             } else {
                 showError("登录失败：用户名或密码错误");
             }
             // login
-            SceneManager.getInstance().loadScene(AppRoute.MAIN);
+//            SceneManager.getInstance().loadScene(AppRoute.MAIN);
         }
     }
 

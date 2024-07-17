@@ -2,37 +2,65 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.ei.desktop.controller.main.MainViewController"
             stylesheets="@main-style.css">
 
+    <left>
+        <VBox styleClass="sidebar" prefWidth="200">
+            <Button text="Home" styleClass="sidebar-button"/>
+            <Button text="Translate" styleClass="sidebar-button"/>
+            <Button text="History" styleClass="sidebar-button"/>
+            <Button text="Settings" styleClass="sidebar-button"/>
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="user-profile">
+                <Circle fx:id="userAvatar" radius="20" styleClass="user-avatar"/>
+                <Button fx:id="loginButton" text="Logout" onAction="#handleLogin" styleClass="login-button"/>
+            </HBox>
+        </VBox>
+    </left>
+
     <center>
-        <VBox styleClass="main-content">
+        <VBox styleClass="main-content" spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
             <TextArea fx:id="inputTextArea" promptText="Enter English sentence here"
-                      styleClass="input-area"
-                      onMouseClicked="#handleTextSelection"/>
-            <Button text="Translate" onAction="#handleTranslate" styleClass="action-button"/>
-            <TextArea fx:id="translationTextArea" promptText="Translation will appear here" styleClass="output-area"/>
+                      styleClass="input-area" VBox.vgrow="ALWAYS" onMouseClicked="#handleTextSelection"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Translate" onAction="#handleTranslate" styleClass="action-button"/>
+                <Button text="Toggle Word Details" onAction="#toggleWordDetails" styleClass="toggle-button"/>
+            </HBox>
+            <TextArea fx:id="translationTextArea" promptText="Translation will appear here"
+                      styleClass="output-area" VBox.vgrow="ALWAYS"/>
         </VBox>
     </center>
 
     <right>
-        <VBox styleClass="sidebar">
-            <Label text="Word Details" styleClass="sidebar-title"/>
-            <ScrollPane fitToWidth="true" styleClass="word-details-scroll">
-                <FlowPane fx:id="wordDetailsFlowPane" styleClass="word-details-flow"/>
-            </ScrollPane>
+        <VBox fx:id="wordDetailsPane" styleClass="sidebar word-details" prefWidth="200">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Word Details" styleClass="sidebar-title" HBox.hgrow="ALWAYS"/>
+                <Button text="Clear All" onAction="#clearAllWordDetails" styleClass="clear-button"/>
+            </HBox>
+            <TabPane VBox.vgrow="ALWAYS">
+                <Tab text="Details">
+                    <ScrollPane fitToWidth="true" styleClass="word-details-scroll">
+                        <FlowPane fx:id="wordDetailsFlowPane" styleClass="word-details-flow"/>
+                    </ScrollPane>
+                </Tab>
+                <Tab text="History">
+                    <ListView fx:id="wordHistoryListView" styleClass="word-history-list"/>
+                </Tab>
+            </TabPane>
         </VBox>
     </right>
-
-
 
     <bottom>
         <TitledPane text="Translation History" expanded="false" styleClass="history-pane">
             <ListView fx:id="historyListView" styleClass="history-list"/>
         </TitledPane>
     </bottom>
-
 </BorderPane>
