@@ -4,14 +4,14 @@ import com.ei.desktop.config.AppConfig;
 import com.ei.desktop.controller.main.MainViewController;
 import com.ei.desktop.route.AppRoute;
 import com.ei.desktop.route.SceneManager;
+import com.ei.desktop.utils.EILog;
+import com.ei.desktop.utils.http.LoginHttp;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.prefs.Preferences;
 
 /**
@@ -20,19 +20,17 @@ import java.util.prefs.Preferences;
  */
 public class LoginController {
     @FXML
-    public Label messageLabel;
-    @FXML
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
-    private AppConfig config;
+    private final AppConfig config;
     /**
      * 记住我复选框
      */
     @FXML
     private CheckBox rememberMeCheckBox;
 
-    private Preferences prefs;
+    private final Preferences prefs;
     @FXML
     private Text actiontarget;
 
@@ -42,39 +40,30 @@ public class LoginController {
         config = AppConfig.getInstance();
     }
 
-
     @FXML
-    protected void handleSubmitButtonAction() {
-        actiontarget.setText("登录按钮被点击");
-        System.out.println("用户名: " + usernameField.getText());
-        System.out.println("密码: " + passwordField.getText());
-        // 这里添加实际的登录逻辑
-    }
-
-    @FXML
-    protected void handleLogin() throws IOException {
+    protected void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-
+        prefs.putBoolean("rememberMe", rememberMeCheckBox.isSelected());
+        if (rememberMeCheckBox.isSelected() && config.isRememberMeEnabled()) {
+            prefs.put("username", username);
+            prefs.put("password", password);
+            // 可以在这里设置过期时间，使用 config.getRememberMeDuration()
+        } else {
+            prefs.remove("username");
+        }
         if (validateInput(username, password)) {
             boolean loginSuccess = performLogin(username, password);
 
             // save setting
             if (loginSuccess) {
-                prefs.putBoolean("rememberMe", rememberMeCheckBox.isSelected());
-                if (rememberMeCheckBox.isSelected() && config.isRememberMeEnabled()) {
-                    prefs.put("username", username);
-                    prefs.put("password", password);
-                    // 可以在这里设置过期时间，使用 config.getRememberMeDuration()
-                } else {
-                    prefs.remove("username");
-                }
+
                 try {
                     // 加载主页面
                     MainViewController mainController = SceneManager.getInstance().loadScene(AppRoute.MAIN, MainViewController.class);
                     mainController.setLoggedIn(true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    EILog.logger.info("程序加载错误{}", (Object[]) e.getStackTrace());
                     showError("Error loading main view");
                 }
                 actiontarget.setText("登录成功");
@@ -103,7 +92,7 @@ public class LoginController {
             return false;
         }
 
-        if (password.length() < 6) {
+        if (password.length() < 4) {
             showError("密码长度必须至少为6个字符");
             return false;
         }
@@ -131,31 +120,15 @@ public class LoginController {
             rememberMeCheckBox.setSelected(false);
         }
 
-        // 为用户名和密码字段添加验证逻辑
-        usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() < 4) {
-                usernameField.setStyle("-fx-border-color: red;");
-            } else {
-                usernameField.setStyle("");
-            }
-        });
-
-        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() < 6) {
-                passwordField.setStyle("-fx-border-color: red;");
-            } else {
-                passwordField.setStyle("");
-            }
-        });
     }
 
     private boolean performLogin(String username, String password) {
-        // 这里应该是实际的登录逻辑
-        // 为了演示，我们只是简单地检查用户名和密码是否非空
-        return !username.isEmpty() && !password.isEmpty();
+        return LoginHttp.login(username, password);
     }
     private void showError(String message) {
         actiontarget.setText(message);
         actiontarget.setStyle("-fx-fill: red;");
     }
+
+
 }

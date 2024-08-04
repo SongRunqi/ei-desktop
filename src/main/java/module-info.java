@@ -5,10 +5,14 @@ module com.ei.desktop {
     requires javafx.graphics;
     requires org.apache.logging.log4j;
     requires java.prefs;
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
 
     // 导出主包
     exports com.ei.desktop;
-
+    // 将该包暴露给jackson
+    exports com.ei.desktop.domain to com.fasterxml.jackson.databind;
+    exports com.ei.desktop.dto to com.fasterxml.jackson.databind;
     // 导出并开放控制器包
     exports com.ei.desktop.controller.login;
     opens com.ei.desktop.controller.login to javafx.fxml;
