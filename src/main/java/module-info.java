@@ -7,6 +7,7 @@ module com.ei.desktop {
     requires java.prefs;
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
+    requires org.slf4j;
 
     // 导出主包
     exports com.ei.desktop;

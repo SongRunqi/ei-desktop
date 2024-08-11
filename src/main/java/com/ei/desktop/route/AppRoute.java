@@ -5,7 +5,7 @@ package com.ei.desktop.route;
  * 2024/7/7-12:31
  */
 public enum AppRoute {
-    LOGIN("/views/login/login.fxml", "login"),
+    LOGIN("/views/login/login.fxml", "english improver"),
     MAIN("/views/main/MainView.fxml", "main"),
     SETTINGS("/views/SettingsView.fxml", "setting");
 

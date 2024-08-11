@@ -7,4 +7,5 @@ package com.ei.desktop.dto;
 
 public class ResponseType {
     public final static String SUCCESS = "SUCCESS";
+    public final static String FAIL = "FAIL";
 }

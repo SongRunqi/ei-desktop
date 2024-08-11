@@ -4,12 +4,16 @@ import com.ei.desktop.config.AppConfig;
 import com.ei.desktop.controller.main.MainViewController;
 import com.ei.desktop.route.AppRoute;
 import com.ei.desktop.route.SceneManager;
+import com.ei.desktop.theme.ColorTheme;
+import com.ei.desktop.theme.ThemeManager;
 import com.ei.desktop.utils.EILog;
+import com.ei.desktop.utils.PreferenceUtils;
 import com.ei.desktop.utils.http.LoginHttp;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.prefs.Preferences;
@@ -20,23 +24,29 @@ import java.util.prefs.Preferences;
  */
 public class LoginController {
     @FXML
+    private VBox rootVBox;
+    @FXML
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
-    private final AppConfig config;
     /**
      * 记住我复选框
      */
     @FXML
     private CheckBox rememberMeCheckBox;
 
-    private final Preferences prefs;
     @FXML
     private Text actiontarget;
 
+    private final AppConfig config;
+    private final Preferences prefs;
+
+    // 主题控制
+    private ThemeManager themeManager = ThemeManager.getInstance();
+
     public LoginController() {
         // 在构造函数中初始化 Preferences
-        prefs = Preferences.userNodeForPackage(LoginController.class);
+        prefs = Preferences.userNodeForPackage(PreferenceUtils.class);
         config = AppConfig.getInstance();
     }
 
@@ -57,7 +67,6 @@ public class LoginController {
 
             // save setting
             if (loginSuccess) {
-
                 try {
                     // 加载主页面
                     MainViewController mainController = SceneManager.getInstance().loadScene(AppRoute.MAIN, MainViewController.class);
@@ -67,7 +76,7 @@ public class LoginController {
                     showError("Error loading main view");
                 }
                 actiontarget.setText("登录成功");
-                actiontarget.setStyle("-fx-fill: green;");
+//                actiontarget.setStyle("-fx-fill: green;");
             } else {
                 showError("登录失败：用户名或密码错误");
             }
@@ -104,6 +113,11 @@ public class LoginController {
     // 为用户名和密码字段添加验证逻辑
     @FXML
     public void initialize() {
+        initUserInfo();
+        initTheme();
+    }
+
+    private void initUserInfo() {
         // 加载保存的用户名（如果有）
         boolean rememberMe = prefs.getBoolean("rememberMe", false);
         if (rememberMe) {
@@ -119,7 +133,6 @@ public class LoginController {
         }else {
             rememberMeCheckBox.setSelected(false);
         }
-
     }
 
     private boolean performLogin(String username, String password) {
@@ -127,8 +140,32 @@ public class LoginController {
     }
     private void showError(String message) {
         actiontarget.setText(message);
-        actiontarget.setStyle("-fx-fill: red;");
+//        actiontarget.setStyle("-fx-fill: red;");
     }
 
+    private void applyTheme(ColorTheme theme) {
+        rootVBox.setStyle(String.format(
+                "-fx-primary: %s; -fx-secondary: %s; -fx-accent: %s; " +
+                        "-fx-light-bg: %s; -fx-lightest-bg: %s; -fx-text-color: %s;",
+                theme.getPrimary(), theme.getSecondary(), theme.getAccent(),
+                theme.getLightBackground(), theme.getLightestBackground(), theme.getTextColor()
+        ));
+    }
+
+    private void initTheme() {
+        applyTheme(themeManager.getCurrentTheme());
+
+        themeManager.currentThemeProperty().addListener((obs, oldTheme, newTheme) -> {
+            applyTheme(newTheme);
+        });
+
+//        switchThemeButton.setOnAction(event -> {
+//            if (themeManager.getCurrentTheme() instanceof PurpleTheme) {
+//                themeManager.setCurrentTheme(new BlueTheme());
+//            } else {
+//                themeManager.setCurrentTheme(new PurpleTheme());
+//            }
+//        });
+    }
 
 }

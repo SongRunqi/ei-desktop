@@ -8,10 +8,16 @@ package com.ei.desktop.domain;
 public class Account {
     private String username;
     private String password;
-
+    private String token;
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Account(String username, String password, String token) {
+        this.username = username;
+        this.password = password;
+        this.token = token;
     }
 
     @Override
@@ -19,6 +25,7 @@ public class Account {
         return "Account{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 
@@ -36,5 +43,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

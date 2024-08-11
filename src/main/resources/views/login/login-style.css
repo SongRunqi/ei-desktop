@@ -1,5 +1,14 @@
+.root {
+    -fx-primary: #4A0E4E;
+    -fx-secondary: #7E4A87;
+    -fx-accent: #A87DB3;
+    -fx-light-bg: #C4A8CC;
+    -fx-lightest-bg: #E9E3EB;
+    -fx-text-color: #000000;
+}
+
 .login-panel {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: -fx-lightest-bg;
     -fx-border-color: #cccccc;
     -fx-border-width: 1px;
     -fx-border-radius: 5px;
@@ -8,9 +17,11 @@
 }
 
 .login-title {
+    -fx-font-family: "Comic Sans MS", cursive;
     -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-text-fill: -fx-primary;
+    -fx-effect: dropshadow(gaussian, -fx-accent, 2, 1.0, 1, 1);
+    -fx-rotate: -5;
 }
 
 .login-field {
@@ -24,7 +35,7 @@
 }
 
 .login-button {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: -fx-secondary;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-pref-width: 250px;
@@ -33,11 +44,11 @@
 }
 
 .login-button:hover {
-    -fx-background-color: #45a049;
+    -fx-background-color: -fx-primary;
 }
 
 .message-label {
-    -fx-text-fill: #ff0000;
+    -fx-text-fill: -fx-primary;
     -fx-font-size: 12px;
 }
 .check-box {
