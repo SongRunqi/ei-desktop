@@ -9,6 +9,8 @@ import com.ei.desktop.utils.PreferenceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.prefs.Preferences;
@@ -19,6 +21,9 @@ import java.util.prefs.Preferences;
  */
 
 public class LoginHttp {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginHttp.class);
+
     static {
         String token = PreferenceUtils.get("token");
         if (token != null && !token.isEmpty()) {
@@ -34,7 +39,7 @@ public class LoginHttp {
         try {
             loginParams = objectMapper.writeValueAsString(account);
         } catch (JsonProcessingException e) {
-            EILog.logger.error("将Account对象转为json字符串出现错误，Account：{}", account);
+            logger.error("将Account对象转为json字符串出现错误，Account：{}", account);
             throw new RuntimeException(e);
         }
         // send post and handle login result
