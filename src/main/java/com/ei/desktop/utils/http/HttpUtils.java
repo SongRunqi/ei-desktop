@@ -1,7 +1,6 @@
 package com.ei.desktop.utils.http;
 
 import com.ei.desktop.dto.ResponseDto;
-import com.ei.desktop.utils.EILog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class HttpUtils {
 
     private static final String EI_BACKEND_URI = "http://localhost:8081";
-    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
     private static final int CONNECT_TIMEOUT = 5;
     static String token = "";
 
@@ -134,23 +133,9 @@ public class HttpUtils {
      * @throws IllegalArgumentException if the params are not in key-value pairs
      */
     public static ResponseDto post(String url, Map<String, String> headers, String auth, Object... params) {
-        if (params.length % 2 != 0) {
-            throw new IllegalArgumentException("参数必须是键值对");
-        }
+        validateParams(params);
 
-        ObjectNode jsonNode = objectMapper.createObjectNode();
-        for (int i = 0; i < params.length; i += 2) {
-            String key = params[i].toString();
-            Object value = params[i + 1];
-            switch (value) {
-                case String s -> jsonNode.put(key, s);
-                case Integer integer -> jsonNode.put(key, integer);
-                case Long l -> jsonNode.put(key, l);
-                case Double v -> jsonNode.put(key, v);
-                case Boolean b -> jsonNode.put(key, b);
-                case null, default -> jsonNode.putPOJO(key, value);
-            }
-        }
+        ObjectNode jsonNode = populateJsonNode(params);
 
         try {
             String jsonBody = objectMapper.writeValueAsString(jsonNode);
@@ -162,23 +147,9 @@ public class HttpUtils {
     }
 
     public static CompletableFuture<ResponseDto> postAsync(String url, Map<String, String> headers, String auth, Object... params) {
-        if (params.length % 2 != 0) {
-            throw new IllegalArgumentException("参数必须是键值对");
-        }
+        validateParams(params);
 
-        ObjectNode jsonNode = objectMapper.createObjectNode();
-        for (int i = 0; i < params.length; i += 2) {
-            String key = params[i].toString();
-            Object value = params[i + 1];
-            switch (value) {
-                case String s -> jsonNode.put(key, s);
-                case Integer integer -> jsonNode.put(key, integer);
-                case Long l -> jsonNode.put(key, l);
-                case Double v -> jsonNode.put(key, v);
-                case Boolean b -> jsonNode.put(key, b);
-                case null, default -> jsonNode.putPOJO(key, value);
-            }
-        }
+        ObjectNode jsonNode = populateJsonNode(params);
 
         try {
             String jsonBody = objectMapper.writeValueAsString(jsonNode);
@@ -211,4 +182,39 @@ public class HttpUtils {
             ex = ex.getCause();
         }
     }
+
+    /**
+     * 请求体参数必须是键值对
+     * @param params k - v
+     */
+    private static void validateParams(Object... params) {
+        if (params.length % 2 != 0) {
+            throw new IllegalArgumentException("参数必须是键值对");
+        }
+    }
+
+    /**
+     * Populates an ObjectNode with key-value pairs from the provided parameters.
+     *
+     * @param params the parameters to include in the ObjectNode, must be in key-value pairs
+     * @return an ObjectNode populated with the provided key-value pairs
+     * @throws IllegalArgumentException if the params are not in key-value pairs
+     */
+    private static ObjectNode populateJsonNode(Object... params) {
+        ObjectNode jsonNode = objectMapper.createObjectNode();
+        for (int i = 0; i < params.length; i += 2) {
+            String key = params[i].toString();
+            Object value = params[i + 1];
+            switch (value) {
+                case String s -> jsonNode.put(key, s);
+                case Integer integer -> jsonNode.put(key, integer);
+                case Long l -> jsonNode.put(key, l);
+                case Double v -> jsonNode.put(key, v);
+                case Boolean b -> jsonNode.put(key, b);
+                case null, default -> jsonNode.putPOJO(key, value);
+            }
+        }
+        return jsonNode;
+    }
+
 }
