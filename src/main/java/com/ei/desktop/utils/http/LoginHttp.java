@@ -27,6 +27,7 @@ public class LoginHttp {
     static {
         String token = PreferenceUtils.get("token");
         if (token != null && !token.isEmpty()) {
+            logger.info("从Preferences中获取到token:{}", token);
             HttpUtils.token = token;
         }
     }
@@ -44,14 +45,16 @@ public class LoginHttp {
         }
         // send post and handle login result
         ResponseDto loginResult = HttpUtils.post("/api/auth/login", loginParams);
+        boolean savedToken = true;
         if (loginResult == null) {
-            return false;
-        }
-        if (Objects.equals(loginResult.getResultType(), ResponseType.SUCCESS)) {
+            EILog.logger.error("登录失败，返回结果为空");
+            savedToken = false;
+        } else if (Objects.equals(loginResult.getResultType(), ResponseType.SUCCESS)) {
             try {
                 JsonNode data = loginResult.getData();
                 String token = data.get("token").toString();
                 if (token == null || token.isEmpty()) {
+                    savedToken = false;
                     throw new TokenNotFoundException();
                 }
                 HttpUtils.token = token;
@@ -59,8 +62,16 @@ public class LoginHttp {
                 PreferenceUtils.put("token", token);
                 return true;
             } catch (TokenNotFoundException e2) {
+                savedToken = false;
                 EILog.logger.error(e2.getMessage());
             }
+        } else {
+            EILog.logger.error("登录失败，返回结果：{}", loginResult);
+            savedToken = false;
+        }
+        if (!savedToken) {
+            logger.error("登录失败，清除Preferences中的token");
+            PreferenceUtils.remove("token");
         }
         return false;
     }

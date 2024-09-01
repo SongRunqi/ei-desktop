@@ -20,7 +20,7 @@ import static com.ei.desktop.utils.http.LoginHttp.checkLoginStatus;
  */
 public class EI extends Application {
 
-    private Logger logger = LoggerFactory.getLogger(EI.class);
+    private final Logger logger = LoggerFactory.getLogger(EI.class);
 
     @Override
     public void start(Stage primaryStage) {

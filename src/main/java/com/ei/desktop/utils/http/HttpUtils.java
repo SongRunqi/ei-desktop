@@ -94,7 +94,8 @@ public class HttpUtils {
         logger.info("发送post请求，请求url：{}", url);
         logger.info("请求参数：{}", paramBody);
         logger.info("额外请求头信息：{}", headers);
-        logger.debug("身份信息：{}", auth);
+        logger.info("身份信息：{}", auth);
+        logger.info("token: {}", token);
     }
 
     private static String replaceUrl(String url) {
@@ -105,9 +106,13 @@ public class HttpUtils {
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + (auth != null ? auth : token))
                 .POST(HttpRequest.BodyPublishers.ofString(paramBody));
 
+        if (auth != null) {
+            requestBuilder.header("Authorization", "Bearer " + auth);
+        } else {
+            requestBuilder.header("Authorization", "Bearer " + token);
+        }
         if (headers != null) {
             headers.forEach(requestBuilder::header);
         }
@@ -173,14 +178,7 @@ public class HttpUtils {
     }
 
     private static void logError(Throwable e) {
-        logger.error("Http请求错误: {}", e.getMessage());
-        int count = 0;
-        Throwable ex = e;
-        logger.error("调用栈:\n{}", (Object[]) ex.getStackTrace());
-        while (count++ < 10 && ex.getCause() != null) {
-            logger.error(ex.getMessage());
-            ex = ex.getCause();
-        }
+        logger.error("Http请求错误: {}", e);
     }
 
     /**

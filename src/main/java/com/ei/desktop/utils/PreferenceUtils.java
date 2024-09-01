@@ -18,4 +18,9 @@ public class PreferenceUtils {
     public static void put(String key, String value) {
         PREFERENCES.put(key, value);
     }
+
+    public static void remove(String token) {
+        // remove token from preferences
+        PREFERENCES.remove(token);
+    }
 }
