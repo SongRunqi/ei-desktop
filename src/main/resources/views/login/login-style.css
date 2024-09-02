@@ -1,12 +1,3 @@
-.root {
-    -fx-primary: #4A0E4E;
-    -fx-secondary: #7E4A87;
-    -fx-accent: #A87DB3;
-    -fx-light-bg: #C4A8CC;
-    -fx-lightest-bg: #E9E3EB;
-    -fx-text-color: #000000;
-}
-
 .login-panel {
     -fx-background-color: -fx-lightest-bg;
     -fx-border-color: #cccccc;

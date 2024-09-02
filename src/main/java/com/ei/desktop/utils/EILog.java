@@ -1,12 +1,13 @@
 package com.ei.desktop.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yitiansong
  * 2024/6/23-17:29
  */
 public class EILog {
-    public static final Logger logger = LogManager.getLogger(EILog.class);
+    public static final Logger logger = LoggerFactory.getLogger(EILog.class);
 }

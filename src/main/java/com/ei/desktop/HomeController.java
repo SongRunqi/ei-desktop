@@ -52,7 +52,7 @@ public class HomeController {
             centerPane.getChildren().setAll((Pane) FXMLLoader.load(resource));
 
         } catch (Exception e) {
-            EILog.logger.error("加载{}文件失败", centerFxml, e);
+            EILog.logger.error("加载文件失败{}", e);
         }
     }
 

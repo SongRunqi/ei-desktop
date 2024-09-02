@@ -72,7 +72,7 @@ public class LoginController {
                     MainViewController mainController = SceneManager.getInstance().loadScene(AppRoute.MAIN, MainViewController.class);
                     mainController.setLoggedIn(true);
                 } catch (Exception e) {
-                    EILog.logger.info("程序加载错误{}", (Object[]) e.getStackTrace());
+                    EILog.logger.info("程序加载错误{}",e);
                     showError("Error loading main view");
                 }
                 actiontarget.setText("登录成功");

@@ -2,14 +2,15 @@ package com.ei.desktop.controller.main;
 
 import com.ei.desktop.route.AppRoute;
 import com.ei.desktop.route.SceneManager;
+import com.ei.desktop.theme.ColorTheme;
+import com.ei.desktop.theme.ThemeManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 /**
@@ -19,7 +20,7 @@ import javafx.scene.shape.Circle;
  * @author yitiansong
  */
 public class MainViewController {
-
+    @FXML public Button showSlideButton;
     @FXML private TextArea inputTextArea;
     @FXML private TextArea translationTextArea;
     @FXML private FlowPane wordDetailsFlowPane;
@@ -27,9 +28,26 @@ public class MainViewController {
     @FXML private Button loginButton;
     @FXML private VBox wordDetailsPane;
     @FXML private ListView<String> wordHistoryListView;
-    private ObservableList<String> wordHistory = FXCollections.observableArrayList();
+    private final ObservableList<String> wordHistory = FXCollections.observableArrayList();
 
     private boolean isWordDetailsVisible = true;
+    @FXML
+    private BorderPane rootPane;
+
+    private final ThemeManager themeManager = ThemeManager.getInstance();
+
+
+
+    private void setThemeColors(ColorTheme theme) {
+        rootPane.setStyle(
+                "-fx-primary: " + theme.getPrimary() + ";" +
+                        "-fx-secondary: " + theme.getSecondary() + ";" +
+                        "-fx-accent: " + theme.getAccent() + ";" +
+                        "-fx-light-bg: " + theme.getLightBackground() + ";" +
+                        "-fx-lightest-bg: " + theme.getLightestBackground() + ";" +
+                        "-fx-text-color: " + theme.getTextColor() + ";"
+        );
+    }
     /**
      * 用户头像
      */
@@ -97,6 +115,12 @@ public class MainViewController {
      */
     @FXML
     private void initialize() {
+        ColorTheme theme = themeManager.getCurrentTheme();
+        setThemeColors(theme);
+
+        themeManager.currentThemeProperty().addListener((obs, oldTheme, newTheme) -> {
+            setThemeColors(newTheme);
+        });
         updateLoginStatus();
     }
 
@@ -195,5 +219,9 @@ public class MainViewController {
     private String translateText(String text) {
         // 实现你的翻译逻辑
         return "Translated: " + text;
+    }
+
+    public void toggleSlide(ActionEvent actionEvent) {
+
     }
 }

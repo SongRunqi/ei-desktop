@@ -7,6 +7,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.ei.desktop.controller.main.MainViewController"
+            fx:id="rootPane"
             stylesheets="@main-style.css">
 
     <left>
@@ -21,6 +22,8 @@
                 <Button fx:id="loginButton" text="Logout" onAction="#handleLogin" styleClass="login-button"/>
             </HBox>
         </VBox>
+        <Button fx:id="showSlideButton" text="&lt;" onAction="#toggleSlide" prefWidth="30"/>
+
     </left>
 
     <center>

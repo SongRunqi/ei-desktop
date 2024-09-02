@@ -33,6 +33,6 @@ public class PurpleTheme implements ColorTheme {
 
     @Override
     public String getTextColor() {
-        return "#000000";
+        return "#333333";
     }
 }
