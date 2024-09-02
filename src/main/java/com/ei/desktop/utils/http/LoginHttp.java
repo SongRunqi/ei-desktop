@@ -32,50 +32,85 @@ public class LoginHttp {
         }
     }
 
+    /**
+     * 登录
+     * 1.Create an Account object with username and password.
+     * 2.Convert the Account object to a JSON string.
+     * 3.Send a POST request with the JSON string.
+     * 4.Handle the response:
+     * If the response is null, log an error.
+     * If the response indicates success:
+     *      Extract the token from the response.
+     *      If the token is valid, store it and return true.
+     *      If the token is invalid, log an error.
+     * If the response indicates failure, log an error and clear the stored token.
+     * @param username 用户名
+     * @param password 密码
+     * @return 是否登录成功
+     */
     public static boolean login(String username, String password) {
-        // prepare json params
         Account account = new Account(username, password);
         ObjectMapper objectMapper = new ObjectMapper();
         String loginParams;
+
         try {
             loginParams = objectMapper.writeValueAsString(account);
         } catch (JsonProcessingException e) {
-            logger.error("将Account对象转为json字符串出现错误，Account：{}", account);
+            logger.error("将Account对象转为json字符串出现错误，Account：{}", account, e);
             throw new RuntimeException(e);
         }
-        // send post and handle login result
+
+        // Send POST request and handle login result
         ResponseDto loginResult = HttpUtils.post("/api/auth/login", loginParams);
-        boolean savedToken = true;
+
         if (loginResult == null) {
             EILog.logger.error("登录失败，返回结果为空");
-            savedToken = false;
-        } else if (Objects.equals(loginResult.getResultType(), ResponseType.SUCCESS)) {
-            try {
-                JsonNode data = loginResult.getData();
-                String token = data.get("token").toString();
-                if (token == null || token.isEmpty()) {
-                    savedToken = false;
-                    throw new TokenNotFoundException();
-                }
-                HttpUtils.token = token;
-                // stores token to preferences
-                PreferenceUtils.put("token", token);
-                return true;
-            } catch (TokenNotFoundException e2) {
-                savedToken = false;
-                EILog.logger.error(e2.getMessage());
-            }
+            clearToken();
+            return false;
+        }
+
+        if (ResponseType.SUCCESS.equals(loginResult.getResultType())) {
+            return handleSuccessfulLogin(loginResult);
         } else {
             EILog.logger.error("登录失败，返回结果：{}", loginResult);
-            savedToken = false;
+            clearToken();
+            return false;
         }
-        if (!savedToken) {
-            logger.error("登录失败，清除Preferences中的token");
-            PreferenceUtils.remove("token");
-        }
-        return false;
     }
 
+    /**
+     * 处理登录成功的结果
+     * @param loginResult 登录结果
+     * @return 是否登录成功
+     */
+    private static boolean handleSuccessfulLogin(ResponseDto loginResult) {
+        try {
+            JsonNode data = loginResult.getData();
+            String token = data.get("token").asText();
+            if (token == null || token.isEmpty()) {
+                throw new TokenNotFoundException();
+            }
+            HttpUtils.token = token;
+            PreferenceUtils.put("token", token);
+            return true;
+        } catch (TokenNotFoundException e) {
+            EILog.logger.error(e.getMessage());
+            return false;
+        }
+    }
+    /**
+     * 清除Preferences中的token
+     */
+    private static void clearToken() {
+        logger.error("登录失败，清除Preferences中的token");
+        PreferenceUtils.remove("token");
+    }
+
+    /**
+     * 检查登录状态
+     * @param username 用户名
+     * @return 是否登录
+     */
     public static boolean checkLoginStatus(String username) {
         if (username == null || username.isEmpty()) {
             return false;

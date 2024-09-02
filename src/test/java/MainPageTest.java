@@ -22,11 +22,11 @@ public class MainPageTest extends Application {
 
             // 加载资源束以支持国际化
             ResourceBundle bundle = ResourceBundle.getBundle("i18n.messages", Locale.getDefault());
-        SceneManager.getInstance().setResourceBundle(bundle);
+            SceneManager.getInstance().setResourceBundle(bundle);
             // 设置资源束到 SceneManager
 
-                // 加载登录页面
-                SceneManager.getInstance().loadScene(AppRoute.LOGIN);
+            // 加载登录页面
+            SceneManager.getInstance().loadScene(AppRoute.LOGIN);
 
 
             // 显示窗口
