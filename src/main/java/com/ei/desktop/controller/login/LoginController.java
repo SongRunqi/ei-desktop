@@ -42,19 +42,27 @@ public class LoginController {
     private final Preferences prefs;
 
     // 主题控制
-    private ThemeManager themeManager = ThemeManager.getInstance();
+    private final ThemeManager themeManager = ThemeManager.getInstance();
 
+    /**
+     * 初始化
+     */
     public LoginController() {
         // 在构造函数中初始化 Preferences
         prefs = Preferences.userNodeForPackage(PreferenceUtils.class);
+        // config没有用
         config = AppConfig.getInstance();
     }
 
+    /**
+     * 登录按钮
+     */
     @FXML
     protected void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
         prefs.putBoolean("rememberMe", rememberMeCheckBox.isSelected());
+        // 更新登录界面保存的用户名和密码
         if (rememberMeCheckBox.isSelected() && config.isRememberMeEnabled()) {
             prefs.put("username", username);
             prefs.put("password", password);
@@ -62,6 +70,7 @@ public class LoginController {
         } else {
             prefs.remove("username");
         }
+        // 校验输入
         if (validateInput(username, password)) {
             boolean loginSuccess = performLogin(username, password);
 
@@ -70,7 +79,7 @@ public class LoginController {
                 try {
                     // 加载主页面
                     MainViewController mainController = SceneManager.getInstance().loadScene(AppRoute.MAIN, MainViewController.class);
-                    mainController.setLoggedIn(true);
+//                    mainController.setLoggedIn(true);
                 } catch (Exception e) {
                     EILog.logger.info("程序加载错误{}",e);
                     showError("Error loading main view");
@@ -85,6 +94,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * 对登录表单进行验证
+     * @param username 用户名
+     * @param password 密码
+     * @return 验证通过与否
+     */
     private boolean validateInput(String username, String password) {
         if (username.isEmpty()) {
             showError("用户名不能为空");
@@ -110,13 +125,19 @@ public class LoginController {
 
         return true;
     }
-    // 为用户名和密码字段添加验证逻辑
+
+    /**
+     * 初始化逻辑
+     */
     @FXML
     public void initialize() {
         initUserInfo();
         initTheme();
     }
 
+    /**
+     * 从prefs获取用户名和密码,避免重复输入
+     */
     private void initUserInfo() {
         // 加载保存的用户名（如果有）
         boolean rememberMe = prefs.getBoolean("rememberMe", false);
@@ -135,14 +156,29 @@ public class LoginController {
         }
     }
 
+    /**
+     * 自行登录
+     * @param username 用户名
+     * @param password 密码
+     * @return 登录成功与否
+     */
     private boolean performLogin(String username, String password) {
         return LoginHttp.login(username, password);
     }
+
+    /**
+     * 显示错误消息
+     * @param message 消息
+     */
     private void showError(String message) {
         actiontarget.setText(message);
 //        actiontarget.setStyle("-fx-fill: red;");
     }
 
+    /**
+     * 应用主题
+     * @param theme 颜色主题
+     */
     private void applyTheme(ColorTheme theme) {
         rootVBox.setStyle(String.format(
                 "-fx-primary: %s; -fx-secondary: %s; -fx-accent: %s; " +
@@ -152,6 +188,9 @@ public class LoginController {
         ));
     }
 
+    /**
+     * 初始化颜色主题
+     */
     private void initTheme() {
         applyTheme(themeManager.getCurrentTheme());
 

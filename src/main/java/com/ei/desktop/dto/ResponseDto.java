@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * @author yitiansong
  * 2024/8/4
+ * 响应实体类
  */
 @SuppressWarnings("unused")
 public class ResponseDto implements Serializable {
@@ -19,6 +20,7 @@ public class ResponseDto implements Serializable {
     private String message;
     @JsonDeserialize
     private JsonNode data;
+    private String content;
 
 
     public String getResultType() {
@@ -53,13 +55,22 @@ public class ResponseDto implements Serializable {
         this.data = data;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "ResponseDto{" +
                 "resultType='" + resultType + '\'' +
                 ", operation='" + operation + '\'' +
                 ", message='" + message + '\'' +
-                ", data='" + data + '\'' +
+                ", data=" + data +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

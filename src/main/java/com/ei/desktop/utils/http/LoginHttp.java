@@ -4,7 +4,6 @@ import com.ei.desktop.domain.Account;
 import com.ei.desktop.dto.ResponseDto;
 import com.ei.desktop.dto.ResponseType;
 import com.ei.desktop.exception.TokenNotFoundException;
-import com.ei.desktop.utils.EILog;
 import com.ei.desktop.utils.PreferenceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,11 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-import java.util.prefs.Preferences;
 
 /**
  * @author yitiansong
  * 2024/8/4
+ * 登录http请求,包含登录,校验token等请求
  */
 
 public class LoginHttp {
@@ -64,7 +63,7 @@ public class LoginHttp {
         ResponseDto loginResult = HttpUtils.post("/api/auth/login", loginParams);
 
         if (loginResult == null) {
-            EILog.logger.error("登录失败，返回结果为空");
+            logger.error("登录失败，返回结果为空");
             clearToken();
             return false;
         }
@@ -72,7 +71,7 @@ public class LoginHttp {
         if (ResponseType.SUCCESS.equals(loginResult.getResultType())) {
             return handleSuccessfulLogin(loginResult);
         } else {
-            EILog.logger.error("登录失败，返回结果：{}", loginResult);
+            logger.error("登录失败，返回结果：{}", loginResult);
             clearToken();
             return false;
         }
@@ -91,10 +90,11 @@ public class LoginHttp {
                 throw new TokenNotFoundException();
             }
             HttpUtils.token = token;
+            // 更新本地存储的token
             PreferenceUtils.put("token", token);
             return true;
         } catch (TokenNotFoundException e) {
-            EILog.logger.error(e.getMessage());
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -115,15 +115,17 @@ public class LoginHttp {
         if (username == null || username.isEmpty()) {
             return false;
         }
-        Preferences loginPreference = Preferences.userNodeForPackage(LoginHttp.class);
-        String token = loginPreference.get("token", null);
+        String token = PreferenceUtils.get("token");
         if (token == null || token.isEmpty()) {
             return false;
         }
         ResponseDto post = HttpUtils.post("/api/auth/token/validate", "username", username, "token", token);
+        if (post == null) {
+            return false;
+        }
         String resultType = post.getResultType();
         if (resultType.equals(ResponseType.FAIL)) {
-            loginPreference.remove("token");
+            PreferenceUtils.remove("token");
             return false;
         }
         return Objects.equals(post.getResultType(), ResponseType.SUCCESS);

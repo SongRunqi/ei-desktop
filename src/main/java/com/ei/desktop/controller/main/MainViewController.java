@@ -21,6 +21,10 @@ import javafx.scene.shape.Circle;
  */
 public class MainViewController {
     @FXML public Button showSlideButton;
+    // 通常意义上的侧边栏
+    @FXML public VBox sidebar;
+    public GridPane sidebarParent;
+    private boolean isSidebarVisible = true;
     @FXML private TextArea inputTextArea;
     @FXML private TextArea translationTextArea;
     @FXML private FlowPane wordDetailsFlowPane;
@@ -221,7 +225,29 @@ public class MainViewController {
         return "Translated: " + text;
     }
 
+    /**
+     * 显示或隐藏sidebar
+     * @param actionEvent
+     */
     public void toggleSlide(ActionEvent actionEvent) {
+        isSidebarVisible = !isSidebarVisible;
+        if (isSidebarVisible) {
+            sidebar.setPrefWidth(0);
+            sidebar.setVisible(!isSidebarVisible);
+            rootPane.setLeft(sidebarParent);
+        }else  {
+            sidebar.setPrefWidth(100);
+            sidebar.setVisible(!isSidebarVisible);
+            rootPane.setLeft(sidebarParent);
+        }
+//        sidebar.setVisible(isSidebarVisible);
+    }
 
+    public void changePage(MouseEvent event) {
+        Object source = event.getSource();
+        if (source instanceof Label) {
+            String text = ((Label) source).getText();
+            SceneManager.getInstance().loadScene(text);
+        }
     }
 }

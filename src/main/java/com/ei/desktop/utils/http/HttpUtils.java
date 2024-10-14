@@ -15,6 +15,10 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * @author yitiansong
+ * 通用http请求
+ */
 public class HttpUtils {
 
     private static final String EI_BACKEND_URI = "http://localhost:8081";
